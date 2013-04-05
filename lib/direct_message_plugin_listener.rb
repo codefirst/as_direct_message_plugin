@@ -1,10 +1,12 @@
 class DirectMessagePluginListener < AsakusaSatellite::Hook::Listener
-  # modify hook name
-  #render_on :hookname, :partial => "_view_file"
+  def global_footer(context)
+    controller = context[:request][:controller]
+    action     = context[:request][:action]
 
-  # or define method by yourself
-  #def hookname(context)
-  #  context[:controller].send(:render_to_string, {:locals => context, :partial => '_view_file'})
-  #end
+    case {:controller => controller, :action => action}
+    when {:controller => "chat", :action => "room"}
+      "<script>#{read_file "app/assets/javascripts/direct_message.js"}</script>"
+    end
+  end
 end
 
